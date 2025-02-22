@@ -72,4 +72,25 @@ return [
         'secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Token Lifetimes
+    |--------------------------------------------------------------------------
+    |
+    | By default, Passport issues long-lived access tokens that expire after one year.
+    | If you would like to configure a longer / shorter token lifetime, you may use the
+    | get used while issuing fresh personal access tokens to your users.
+    | tokensExpireIn, refreshTokensExpireIn, and personalAccessTokensExpireIn methods.
+    | These methods are called from the boot method of your application's
+    | App\Providers\AppServiceProvider
+    | if the below 'use_token_custom_lifetimes' is set to true
+    |
+    */
+    'token_lifetimes' => [
+        'use_custom_lifetimes' => filter_var(env('PASSPORT_USE_CUSTOM_LIFETIMES', false), FILTER_VALIDATE_BOOLEAN),
+        'token_expires_in' => env('PASSPORT_TOKEN_EXPIRATION_IN_DAYS', 15),
+        'refresh_token_expires_in' => env('PASSPORT_REFRESH_TOKENS_EXPIRATION_IN_DAYS', 30),
+        'personal_access_token_expires_in' => env('PASSPORT_PERSONAL_ACCESS_TOKENS_EXPIRATION_IN_MONTHS', 6),
+    ]
+
 ];
