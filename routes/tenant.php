@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware;
 use App\Http\Controllers\Passport\AuthorizationController;
-
 /*
 |--------------------------------------------------------------------------
 | Tenant Routes
@@ -46,13 +45,15 @@ Route::middleware([
 });
 
 /**
- * Universal routes
+ * Universal routes using session
  */
 Route::middleware([
     'web',
     Middleware\InitializeTenancyByDomain::class,
     'universal',
 ])->group(function () {
+
+    Route::get('/oauth/authorize', [AuthorizationController::class, 'authorize'])->name('passport.authorizations.authorize');
 
     Route::get('/', function () {
         return Inertia::render('Welcome', [
@@ -178,9 +179,10 @@ Route::middleware([
     });
 
     /**
-     * Authenticated routes
+     * Session Authenticated routes
      */
     Route::middleware([
+        'web',
         'auth:sanctum',
         config('jetstream.auth_session'),
         'verified',
@@ -188,14 +190,17 @@ Route::middleware([
         Route::get('/dashboard', function () {
             return Inertia::render('Dashboard');
         })->name('dashboard');
-        Route::get('/oauth/authorize', [AuthorizationController::class, 'authorize'])->name('passport.authorizations.authorize');
     });
 
-    /**
-     * Passport protected routes
-     * */
-    Route::middleware('auth:api')->group(function () {
-        // add routes here
-    });
+});
 
+/**
+ * Passport Authenticated Universal Routes
+ * */
+Route::middleware([
+    Middleware\InitializeTenancyByDomain::class,
+    'universal',
+    'auth:api',
+])->group(function () {
+    // add routes here
 });

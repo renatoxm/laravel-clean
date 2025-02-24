@@ -14,7 +14,7 @@
 
 - Feat: [Tenancy v4 for Laravel](https://tenancy-v4.pages.dev/)
 
-### l-p-t-jetstream
+### lara-pass-tenancy-jet
 
 - Feat: [Laravel Jetstream 5](https://jetstream.laravel.com/)
 - Fix: Added `app/Http/Middleware/TrustProxies.php`
@@ -81,7 +81,7 @@ public function boot()
 - Fix: [Laravel Passport login not redirecting properly with Jetstream Inertia](https://stackoverflow.com/questions/66571546/laravel-passport-login-not-redirecting-properly-with-jetstream-inertia) - Overrided [Laravel Fortify](https://laravel.com/docs/11.x/fortify) LoginResponse in `App\Http\Responses` and registered in `App\Providers\FortifyServiceProvider::register`
 - Fix: [Laravel Passport login not redirecting properly with Jetstream Inertia](https://stackoverflow.com/questions/66571546/laravel-passport-login-not-redirecting-properly-with-jetstream-inertia) - Overrided [Laravel Fortify](https://laravel.com/docs/11.x/fortify) TwoFactorLoginResponse in `App\Http\Responses` and registered in `App\Providers\FortifyServiceProvider::register`
 - Fix: Overrided `Laravel\Passport\Http\Controllers\AuthorizationController` at `App\Http\Controllers\Passport::AuthorizationController` to replace original Passport's blade template with a vue Page.
-- Feat: Overrided the default `oauth/authorize` route by placing a route to the new controller at `routes/tenant.php` see in **Notice** bellow
+- Feat: Overrided the default `oauth/authorize` route addind it in `routes/tenant.php` see in **Notice** bellow
 - Feat: Added `js\Pages\Passport\Authorize.vue` typescript vue page to replace original blade template from Laravel Passport
 - Added `App\Providers::ApiServiceProvider` to centralize all Passport related services instead of using `AuthServiceProvider`
 - Added Passport routes to `routes/tenants` folder
@@ -91,7 +91,6 @@ public function boot()
 - Feat: Created a Callback vue page for testing Getting Authorization Tokens before the request code is returned
 - Docs: Added documentation about Passport Oauth
 - Feat: Created a new seeder to generate basic oauth clients for the tenant at `database/seeders/TenantOauthClientSeeder.php`
-- Fix: public and private keys must be stored at `.env` generate them, copy at the respective variables and delete them after.
 
 **Config:**
 
@@ -101,10 +100,6 @@ sail artisan migrate
 
 # generate your passport keys (command puts the keys in the `storage/` folder)
 sail artisan passport:keys
-
-# COPY both file contents to your .env and delete them both after, so they can work with tenants
-PASSPORT_PRIVATE_KEY=
-PASSPORT_PUBLIC_KEY=
 
 # create a central client with (when prompted for redirect, type http://localhost/callback)
 sail artisan passport:client
